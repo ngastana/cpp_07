@@ -15,7 +15,7 @@ void printString(std::string& str) {
 
 int main() {
     int arr[] = {1, 2, 3, 4, 5};
-    std::string names[] = {"Nere", "ChatGPT", "C++"};
+    std::string names[] = {"Nere", "Ana", "C++"};
 
     std::cout << "Original array:" << std::endl;
     iter(arr, 5, printInt);
