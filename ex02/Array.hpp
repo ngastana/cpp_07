@@ -12,53 +12,50 @@ class Array
         T   *_array;
         unsigned int _size;
     public:
-        Array(): _size(0){
+        Array(): _array(NULL), _size(0){
             std::cout << "Default Constructor called: created empty Array of size 0" << std::endl;
-            this->_array = new T[this->_size];
         }
         Array(unsigned int size): _size(size){
-            std::cout << "Constructor for an Array of size" << size << "called" << std::endl;
+            std::cout << "Constructor for an Array of size " << size << " called" << std::endl;
             this->_array= (_size > 0)? new T[this->_size] : NULL;
         }
-        Array(const Array &copy): _size(copy.size()){
+        Array(const Array &copy): _size(copy._size){
             std::cout << "Copy Constructor called" << std::endl;
-            this->_array = NULL;
-            this->_array = copy._array;
+            _array = (_size > 0) ? new T[_size] : NULL;
+            for (unsigned int i = 0; i < _size; i++)
+                _array[i] = copy._array[i];
         }
         Array &operator=(const Array &other){
+            std::cout << "operator= called" << std::endl;
             if (this == &other)
                 return (*this);
-            delete [] this->_array;
-            this->_size = other.size();
-            _array = (_size > 0) ? this->_array = new T[other.size()] : NULL;
-            for (unsigned int i = 0; i < this->_size; i++)
-                this->_array[i] = other._array[i];
+            delete [] _array;
+            _size = other.size();
+            _array = (_size > 0) ? new T[_size] : NULL;
+            for (unsigned int i = 0; i < _size; i++)
+                _array[i] = other._array[i];
             return (*this);
         }
         ~Array() {
+            std::cout << "Destructor called" << std::endl;
             delete[] _array;
         }
 
-        unsigned int size() const{ // mustn't modify the current instance
+        unsigned int size() const{
             return (this->_size);
         }
 
         T &operator[](unsigned int index){
             if (index >= this->_size || !_array)
-            {
-                std::cout << "index: " << index << std::endl;
                 throw InvalidIndexException();
-            }
             return (this->_array[index]);
         }
         class InvalidIndexException : public std::exception{
             public:
-                virtual const char *what() const throw();
+                virtual const char *what() const throw() {
+                    return "Index out of bounds";
+                }
         };
-        void InvalidIndexException::what() const
-        {
-            std::cerr << "size muy small chacho" << std::endl;
-        }
 };
 
 #endif
